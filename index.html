@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patrón de Ideas — Diseño Original</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --crema:     #F7F2EC;
+      --crema-2:   #EDE5D8;
+      --dorado:    #C9A96E;
+      --dorado-claro: #E2C99A;
+      --marron:    #8B6A4A;
+      --texto:     #3D2E20;
+      --gris:      #7A7068;
+      --blanco:    #FDFAF6;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--crema); color: var(--texto); font-weight: 300; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(247,242,236,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--crema-2);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--marron); font-weight: 600;
+    }
+    .nav-logo span { color: var(--dorado); }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul a {
+      text-decoration: none; color: var(--gris);
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--dorado); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      padding-top: 64px;
+    }
+    .hero-left {
+      display: flex; flex-direction: column;
+      justify-content: center; padding: 80px 64px;
+      background: var(--crema);
+    }
+    .hero-logo {
+      width: 100px; border-radius: 50%; margin-bottom: 36px;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--dorado); margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.4rem);
+      font-weight: 300; line-height: 1.15; margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: italic; color: var(--marron); }
+    .hero-desc {
+      font-size: 0.92rem; line-height: 1.85; color: var(--gris);
+      max-width: 380px; margin-bottom: 36px;
+    }
+    .hero-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 36px; width: 180px;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--dorado-claro);
+    }
+    .hero-divider span { color: var(--dorado); font-size: 0.75rem; }
+    .hero-cta {
+      display: inline-block; padding: 13px 36px;
+      border: 1px solid var(--dorado); color: var(--marron);
+      text-decoration: none; font-size: 0.75rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      transition: background 0.25s, color 0.25s; align-self: flex-start;
+    }
+    .hero-cta:hover { background: var(--dorado); color: var(--blanco); }
+
+    .hero-right {
+      position: relative; overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .hero-right-overlay {
+      position: absolute; bottom: 32px; left: 32px;
+      background: rgba(247,242,236,0.88);
+      padding: 16px 24px; backdrop-filter: blur(4px);
+    }
+    .hero-right-overlay p {
+      font-size: 0.72rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--marron);
+    }
+
+    /* STRIP */
+    .strip {
+      background: var(--texto);
+      display: flex; justify-content: center;
+      gap: 48px; padding: 14px 48px;
+      flex-wrap: wrap;
+    }
+    .strip span {
+      font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--dorado-claro);
+    }
+
+    /* SECTION BASE */
+    .section-header { margin-bottom: 48px; }
+    .section-label {
+      font-size: 0.7rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--dorado);
+      display: block; margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 300; line-height: 1.2;
+    }
+    .section-title em { font-style: italic; color: var(--marron); }
+
+    /* PANERAS */
+    #paneras { padding: 88px 48px; background: var(--blanco); }
+    #paneras .inner { max-width: 1200px; margin: 0 auto; }
+
+    .paneras-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .panera-card { position: relative; overflow: hidden; background: var(--crema-2); }
+    .panera-card img {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover; display: block;
+      transition: transform 0.5s ease;
+    }
+    .panera-card:hover img { transform: scale(1.04); }
+    .panera-info {
+      padding: 18px 20px 20px;
+    }
+    .panera-nombre {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; color: var(--texto); margin-bottom: 6px;
+    }
+    .panera-detalle {
+      font-size: 0.8rem; color: var(--gris); line-height: 1.6; margin-bottom: 14px;
+    }
+    .btn-wsp {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px;
+      border: 1px solid var(--dorado);
+      color: var(--marron); text-decoration: none;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: background 0.22s, color 0.22s, border-color 0.22s;
+    }
+    .btn-wsp:hover { background: #25D366; border-color: #25D366; color: #fff; }
+    .btn-wsp svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+
+    /* MANTELES — full-width feature */
+    #manteles { padding: 0; background: var(--crema); }
+    .mantel-feature {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 520px;
+    }
+    .mantel-feature.reverse { direction: rtl; }
+    .mantel-feature.reverse > * { direction: ltr; }
+    .mantel-img { overflow: hidden; }
+    .mantel-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .mantel-content {
+      display: flex; flex-direction: column;
+      justify-content: center; padding: 64px 56px;
+      background: var(--crema);
+    }
+    .mantel-feature.alt .mantel-content { background: var(--crema-2); }
+
+    /* TELAS */
+    #telas { padding: 88px 48px; background: var(--crema-2); }
+    #telas .inner { max-width: 1200px; margin: 0 auto; }
+    .telas-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    }
+    .tela-card { overflow: hidden; }
+    .tela-card img {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover; display: block;
+      transition: transform 0.5s ease;
+    }
+    .tela-card:hover img { transform: scale(1.03); }
+
+    /* OTROS PRODUCTOS */
+    #otros { padding: 88px 48px; background: var(--blanco); }
+    #otros .inner { max-width: 1200px; margin: 0 auto; }
+    .otros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 2px;
+    }
+    .otro-card {
+      background: var(--crema);
+      padding: 32px 24px 28px;
+      display: flex; flex-direction: column;
+      transition: background 0.22s;
+    }
+    .otro-card:hover { background: var(--crema-2); }
+    .otro-icon { font-size: 1.6rem; margin-bottom: 14px; }
+    .otro-linea { width: 24px; height: 1px; background: var(--dorado); margin-bottom: 12px; }
+    .otro-nombre {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; color: var(--texto); margin-bottom: 8px;
+    }
+    .otro-desc { font-size: 0.82rem; color: var(--gris); line-height: 1.7; margin-bottom: 18px; flex: 1; }
+
+    /* CONTACTO */
+    #contacto {
+      background: var(--texto); text-align: center;
+      padding: 96px 48px;
+    }
+    #contacto .section-label { color: var(--dorado-claro); }
+    #contacto .section-title { color: var(--crema); }
+    #contacto .section-title em { color: var(--dorado-claro); }
+    #contacto p { color: #a09080; font-size: 0.92rem; line-height: 1.85; max-width: 440px; margin: 16px auto 44px; }
+    .contacto-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+    .contacto-btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 13px 30px;
+      border: 1px solid var(--dorado); color: var(--dorado-claro);
+      text-decoration: none; font-size: 0.75rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      transition: background 0.25s, color 0.25s;
+    }
+    .contacto-btn:hover { background: var(--dorado); color: var(--texto); }
+    .contacto-btn svg { width: 15px; height: 15px; fill: currentColor; }
+
+    footer {
+      background: #251A10; text-align: center;
+      padding: 24px; font-size: 0.72rem;
+      color: #5a4a38; letter-spacing: 0.08em;
+    }
+    footer span { color: var(--dorado); }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 50vw; }
+      .hero-left { padding: 60px 28px; }
+      .mantel-feature, .mantel-feature.reverse { grid-template-columns: 1fr; direction: ltr; }
+      .mantel-content { padding: 40px 28px; }
+      .paneras-grid { grid-template-columns: 1fr 1fr; }
+      .telas-grid { grid-template-columns: 1fr; }
+      nav { padding: 14px 20px; }
+      nav ul { gap: 18px; }
+      section { padding: 64px 20px; }
+      #paneras, #otros, #telas { padding: 64px 20px; }
+      #contacto { padding: 64px 20px; }
+    }
+    @media (max-width: 560px) {
+      nav ul { display: none; }
+      .paneras-grid { grid-template-columns: 1fr; }
+      .strip { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Patrón <span>de Ideas</span></div>
+  <ul>
+    <li><a href="#paneras">Paneras</a></li>
+    <li><a href="#manteles">Manteles</a></li>
+    <li><a href="#otros">Más productos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <img class="hero-logo" src="99115.jpg" alt="Logo Patrón de Ideas" />
+    <p class="hero-eyebrow">Textiles artesanales para el hogar</p>
+    <h1>Diseño original<br>en cada <em>detalle</em></h1>
+    <div class="hero-divider"><span>♡</span></div>
+    <p class="hero-desc">
+      Creamos manteles, paneras, almohadones y más con telas seleccionadas y terminaciones que marcan la diferencia. Cada pieza, única.
+    </p>
+    <a href="#paneras" class="hero-cta">Descubrí la colección</a>
+  </div>
+  <div class="hero-right">
+    <img src="99144.png" alt="Mesa con mantel y paneras Patrón de Ideas" />
+    <div class="hero-right-overlay">
+      <p>Nueva colección disponible</p>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <span>✦ Diseño original</span>
+  <span>✦ Confección artesanal</span>
+  <span>✦ Telas seleccionadas</span>
+  <span>✦ Envíos a todo el país</span>
+</div>
+
+<!-- PANERAS -->
+<section id="paneras">
+  <div class="inner">
+    <div class="section-header">
+      <span class="section-label">Nuestra colección</span>
+      <h2 class="section-title">Paneras <em>reversibles</em></h2>
+    </div>
+    <div class="paneras-grid">
+
+      <div class="panera-card">
+        <img src="97286.jpg" alt="Paneras reversibles diente de leon" />
+        <div class="panera-info">
+          <div class="panera-nombre">Diente de León</div>
+          <p class="panera-detalle">Gabardina acrílica estampada · Reverso en lienzo natural</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20la%20*Panera%20Diente%20de%20Le%C3%B3n*%20%F0%9F%A7%BA" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+            Consultar
+          </a>
+        </div>
+      </div>
+
+      <div class="panera-card">
+        <img src="97292.jpg" alt="Paneras reversibles marrón rayas" />
+        <div class="panera-info">
+          <div class="panera-nombre">Rayas Chocolate</div>
+          <p class="panera-detalle">Gabardina acrílica · Reverso en lienzo natural · Etiqueta dorada</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20la%20*Panera%20Rayas%20Chocolate*%20%F0%9F%A7%BA" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+            Consultar
+          </a>
+        </div>
+      </div>
+
+      <div class="panera-card">
+        <img src="97312.jpg" alt="Paneras reversibles floral gris" />
+        <div class="panera-info">
+          <div class="panera-nombre">Floral Gris</div>
+          <p class="panera-detalle">Gabardina acrílica · Reverso en lienzo crudo</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20la%20*Panera%20Floral%20Gris*%20%F0%9F%A7%BA" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+            Consultar
+          </a>
+        </div>
+      </div>
+
+      <div class="panera-card">
+        <img src="97302.jpg" alt="Paneras reversibles azul floral" />
+        <div class="panera-info">
+          <div class="panera-nombre">Azul Provenzal</div>
+          <p class="panera-detalle">Gabardina acrílica azul · Reverso en lienzo floral</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20la%20*Panera%20Azul%20Provenzal*%20%F0%9F%A7%BA" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+            Consultar
+          </a>
+        </div>
+      </div>
+
+      <div class="panera-card">
+        <img src="97308.jpg" alt="Paneras reversibles floral blanco magnolias" />
+        <div class="panera-info">
+          <div class="panera-nombre">Magnolias</div>
+          <p class="panera-detalle">Gabardina acrílica floral · Reverso en lienzo crudo</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20la%20*Panera%20Magnolias*%20%F0%9F%A7%BA" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+            Consultar
+          </a>
+        </div>
+      </div>
+
+      <div class="panera-card">
+        <img src="97373.jpg" alt="Mesa puesta con mantel y paneras" />
+        <div class="panera-info">
+          <div class="panera-nombre">Set de mesa completo</div>
+          <p class="panera-detalle">Mantel + paneras a juego · Consultar diseños disponibles</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20un%20*Set%20de%20Mesa%20completo*%20%F0%9F%8D%BD%EF%B8%8F" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+            Consultar
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MANTELES -->
+<section id="manteles">
+
+  <div class="mantel-feature">
+    <div class="mantel-img">
+      <img src="99144.png" alt="Mantel floral en mesa servida" />
+    </div>
+    <div class="mantel-content">
+      <span class="section-label">Manteles</span>
+      <h2 class="section-title">Para cada <em>ocasión</em></h2>
+      <p style="font-size:0.92rem;color:var(--gris);line-height:1.85;margin:20px 0 28px;max-width:360px;">
+        Confeccionados en gabardina acrílica de alta calidad. Resistentes, fáciles de limpiar y con estampados exclusivos que transforman cualquier mesa.
+      </p>
+      <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20consultar%20por%20los%20*Manteles*%20%F0%9F%8D%BD%EF%B8%8F" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+        Consultar manteles
+      </a>
+    </div>
+  </div>
+
+  <div class="mantel-feature alt">
+    <div class="mantel-img">
+      <img src="97373.jpg" alt="Mesa completa con mantel floral gris" />
+    </div>
+    <div class="mantel-content">
+      <span class="section-label">Coordinated</span>
+      <h2 class="section-title">Mantel y panera<br><em>a juego</em></h2>
+      <p style="font-size:0.92rem;color:var(--gris);line-height:1.85;margin:20px 0 28px;max-width:360px;">
+        Combiná tu mantel con las paneras reversibles del mismo diseño. Una mesa coherente y con identidad propia.
+      </p>
+      <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20un%20*Set%20coordinado*%20mantel%20y%20panera%20%F0%9F%8D%BD%EF%B8%8F" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+        Consultar set
+      </a>
+    </div>
+  </div>
+
+</section>
+
+<!-- TELAS -->
+<section id="telas">
+  <div class="inner">
+    <div class="section-header">
+      <span class="section-label">Nuestros materiales</span>
+      <h2 class="section-title">Telas <em>exclusivas</em></h2>
+    </div>
+    <div class="telas-grid">
+      <div class="tela-card">
+        <img src="97255.jpg" alt="Telas estampadas seleccionadas" />
+      </div>
+      <div class="tela-card">
+        <img src="97643.png" alt="Variedad de telas estampadas" />
+      </div>
+    </div>
+    <p style="margin-top:28px;font-size:0.88rem;color:var(--gris);line-height:1.85;max-width:600px;">
+      Trabajamos con gabardina acrílica y lienzo de primera calidad. Cada temporada incorporamos nuevos diseños y estampados para que tu hogar esté siempre a la moda.
+    </p>
+  </div>
+</section>
+
+<!-- OTROS PRODUCTOS -->
+<section id="otros">
+  <div class="inner">
+    <div class="section-header">
+      <span class="section-label">También hacemos</span>
+      <h2 class="section-title">Más productos <em>para vos</em></h2>
+    </div>
+    <div class="otros-grid">
+
+      <div class="otro-card">
+        <div class="otro-icon">🛋️</div>
+        <div class="otro-linea"></div>
+        <div class="otro-nombre">Almohadones</div>
+        <p class="otro-desc">El detalle que transforma cualquier rincón del hogar.</p>
+        <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20consultar%20por%20*Almohadones*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+      </div>
+
+      <div class="otro-card">
+        <div class="otro-icon">👜</div>
+        <div class="otro-linea"></div>
+        <div class="otro-nombre">Bolsos de Lienzo</div>
+        <p class="otro-desc">Prácticos y con identidad. Para el día a día con estilo.</p>
+        <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20consultar%20por%20*Bolsos%20de%20Lienzo*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+      </div>
+
+      <div class="otro-card">
+        <div class="otro-icon">🪮</div>
+        <div class="otro-linea"></div>
+        <div class="otro-nombre">Neceser</div>
+        <p class="otro-desc">Organización y estilo para llevar a todos lados. Ideal para regalo.</p>
+        <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20consultar%20por%20el%20*Neceser*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+      </div>
+
+      <div class="otro-card">
+        <div class="otro-icon">🛏️</div>
+        <div class="otro-linea"></div>
+        <div class="otro-nombre">Funda de Edredón</div>
+        <p class="otro-desc">Dale nueva vida a tu dormitorio con una funda a medida.</p>
+        <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20consultar%20por%20la%20*Funda%20de%20Edr%C3%A9don*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+      </div>
+
+      <div class="otro-card">
+        <div class="otro-icon">✨</div>
+        <div class="otro-linea"></div>
+        <div class="otro-nombre">Caminos de Mesa</div>
+        <p class="otro-desc">El toque final para una mesa elegante. Distintos largos y diseños.</p>
+        <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20consultar%20por%20*Caminos%20de%20Mesa*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <span class="section-label">Escribinos</span>
+  <h2 class="section-title">¿Te gustó algo?<br><em>Hablemos</em></h2>
+  <p>Hacemos pedidos personalizados y enviamos a todo el país. Seguinos en redes para ver las últimas novedades.</p>
+  <div class="contacto-btns">
+    <a href="mailto:contacto.patrondeideas@gmail.com" class="contacto-btn">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      Email
+    </a>
+    <a href="https://wa.me/541178248053?text=Hola!%20Vi%20su%20p%C3%A1gina%20y%20me%20gustar%C3%ADa%20consultar" target="_blank" class="contacto-btn">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+      WhatsApp
+    </a>
+    <a href="https://instagram.com/patrondeideas" target="_blank" class="contacto-btn">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      @patrondeideas
+    </a>
+    <a href="https://tiktok.com/@patrondeideas" target="_blank" class="contacto-btn">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.15 8.15 0 004.77 1.52V6.76a4.85 4.85 0 01-1-.07z"/></svg>
+      TikTok
+    </a>
+  </div>
+</section>
+
+<footer>
+  © 2025 <span>Patrón de Ideas</span> — Diseño Original · Hecho con ♡
+</footer>
+
+</body>
+</html>
