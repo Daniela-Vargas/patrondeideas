@@ -25,8 +25,8 @@
 
     /* HERO */
     .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:52px}
-    .hero-left{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 48px;background:var(--crema);text-align:center}
-    .hero-logo{width:200px;border-radius:50%;margin-bottom:32px;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
+    .hero-left{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 48px;background:var(--crema);text-align:center}
+    .hero-logo{width:180px;border-radius:50%;margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
     .hero-eyebrow{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dorado);margin-bottom:14px}
     .hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,3.5vw,3.6rem);font-weight:300;line-height:1.15;margin-bottom:18px}
     .hero h1 em{font-style:italic;color:var(--marron)}
@@ -156,6 +156,7 @@
   <ul>
     <li><a href="#paneras">Paneras</a></li>
     <li><a href="#manteles">Manteles</a></li>
+    <li><a href="#bolsos">Bolsos</a></li>
     <li><a href="#otros">Más</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ul>
@@ -276,8 +277,8 @@
     <h2 class="section-title">Todos los <em>motivos</em> de paneras</h2>
     <p class="section-intro">Mirá la colección completa. Cada panera es reversible — al darla vuelta cambia completamente el look.</p>
     <div class="motivos-grid">
-      <div class="motivo-img"><img src="paneras.jpg" alt="Colección paneras motivos 1"/></div>
-      <div class="motivo-img"><img src="paneras2.jpg" alt="Colección paneras motivos 2"/></div>
+      <div class="motivo-img"><img src="panera-variantes.png" alt="Colección paneras motivos 1"/></div>
+      <div class="motivo-img"><img src="panera-variantes2.png" alt="Colección paneras motivos 2"/></div>
     </div>
     <div style="margin-top:28px">
       <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Quer%C3%ADa%20consultar%20por%20las%20*paneras*%2C%20%C2%BFcu%C3%A1les%20tienen%20disponibles?" target="_blank">
@@ -388,8 +389,8 @@
     <h2 class="section-title">Todos los <em>motivos</em> de manteles</h2>
     <p class="section-intro">Explorá todos los estampados disponibles. Si tenés dudas sobre colores o medidas, escribinos.</p>
     <div class="motivos-manteles-grid">
-      <div class="motivo-img"><img src="Motivos-manteles-linea.jpeg" alt="Motivos manteles línea"/></div>
-      <div class="motivo-img"><img src="Motivos-manteles-rombo.jpeg" alt="Motivos manteles rombo"/></div>
+      <div class="motivo-img"><img src="motivos-manteles-cuadrados.png" alt="Motivos manteles línea"/></div>
+      <div class="motivo-img"><img src="motivos-manteles-rombo.png" alt="Motivos manteles rombo"/></div>
     </div>
     <div style="margin-top:28px">
       <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Quer%C3%ADa%20consultar%20por%20los%20*manteles*%2C%20%C2%BFcu%C3%A1les%20tienen%20disponibles?" target="_blank">
@@ -399,6 +400,133 @@
     </div>
   </div>
 </section>
+
+<!-- BOLSOS -->
+<style>
+  .bolso-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:32px;margin-bottom:48px}
+  .bolso-card{background:var(--blanco);display:flex;flex-direction:column;box-shadow:0 2px 16px rgba(0,0,0,0.06)}
+  .carr{position:relative;aspect-ratio:1;overflow:hidden}
+  .carr-track{display:flex;height:100%;transition:transform .35s ease}
+  .carr-track img{min-width:100%;height:100%;object-fit:cover;flex-shrink:0}
+  .carr-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(247,242,236,0.85);border:none;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--marron);transition:background .2s}
+  .carr-btn:hover{background:var(--crema-2)}
+  .carr-prev{left:8px}
+  .carr-next{right:8px}
+  .carr-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+  .carr-dot{width:6px;height:6px;border-radius:50%;background:rgba(139,106,74,0.3);cursor:pointer;transition:background .2s}
+  .carr-dot.active{background:var(--marron)}
+  .bolso-body{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .bolso-nombre{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--texto)}
+  .bolso-desc{font-size:.82rem;color:var(--gris);line-height:1.6}
+</style>
+
+<section id="bolsos" style="padding:88px 48px;background:var(--crema)">
+  <div class="inner" style="max-width:1200px;margin:0 auto">
+    <span class="section-label">Colección</span>
+    <h2 class="section-title">Bolsos de <em>lienzo</em></h2>
+    <p class="section-intro">Confeccionados a mano en lienzo de calidad. Prácticos, con identidad y únicos. Cada bolso es una pieza irrepetible.</p>
+    <div class="bolso-grid">
+
+      <!-- BOLSO MARIPOSA -->
+      <div class="bolso-card">
+        <div class="carr" id="carr-mariposa">
+          <div class="carr-track" id="track-mariposa">
+            <img src="Bolso-mariposa.jpeg" alt="Bolso Mariposa"/>
+            <img src="Bolso-mariposa1.jpeg" alt="Bolso Mariposa detalle"/>
+            <img src="bolso-mariposa3.jpeg" alt="Bolso Mariposa estampado"/>
+          </div>
+          <button class="carr-btn carr-prev" onclick="moverCarr('mariposa',-1)">‹</button>
+          <button class="carr-btn carr-next" onclick="moverCarr('mariposa',1)">›</button>
+          <div class="carr-dots" id="dots-mariposa">
+            <div class="carr-dot active" onclick="irA('mariposa',0)"></div>
+            <div class="carr-dot" onclick="irA('mariposa',1)"></div>
+            <div class="carr-dot" onclick="irA('mariposa',2)"></div>
+          </div>
+        </div>
+        <div class="bolso-body">
+          <div class="bolso-nombre">Bolso Mariposa</div>
+          <p class="bolso-desc">Lienzo rayado gris · Estampado luna y mariposa · Asa gris</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20el%20*Bolso%20Mariposa*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+        </div>
+      </div>
+
+      <!-- BOLSO FLORES AZULES -->
+      <div class="bolso-card">
+        <div class="carr" id="carr-azules">
+          <div class="carr-track" id="track-azules">
+            <img src="bolso-rayabeige-floresazules.jpeg" alt="Bolso Flores Azules"/>
+            <img src="bolso-rayabeige-floresazules1.jpeg" alt="Bolso Flores Azules detalle"/>
+            <img src="bolso-rayabeige-floresazules2.jpeg" alt="Bolso Flores Azules fondo"/>
+          </div>
+          <button class="carr-btn carr-prev" onclick="moverCarr('azules',-1)">‹</button>
+          <button class="carr-btn carr-next" onclick="moverCarr('azules',1)">›</button>
+          <div class="carr-dots" id="dots-azules">
+            <div class="carr-dot active" onclick="irA('azules',0)"></div>
+            <div class="carr-dot" onclick="irA('azules',1)"></div>
+            <div class="carr-dot" onclick="irA('azules',2)"></div>
+          </div>
+        </div>
+        <div class="bolso-body">
+          <div class="bolso-nombre">Bolso Flores Azules</div>
+          <p class="bolso-desc">Lienzo rayado beige · Bolsillo frontal floral azul y dorado</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20el%20*Bolso%20Flores%20Azules*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+        </div>
+      </div>
+
+      <!-- BOLSO ROSAS VINTAGE -->
+      <div class="bolso-card">
+        <div class="carr" id="carr-rosas">
+          <div class="carr-track" id="track-rosas">
+            <img src="bolso-rayaverde-flores.jpeg" alt="Bolso Rosas Vintage"/>
+            <img src="bolso-rayaverde-flores2.jpeg" alt="Bolso Rosas Vintage detalle"/>
+            <img src="bolso-rayaverde-flores3.jpeg" alt="Bolso Rosas Vintage fondo"/>
+          </div>
+          <button class="carr-btn carr-prev" onclick="moverCarr('rosas',-1)">‹</button>
+          <button class="carr-btn carr-next" onclick="moverCarr('rosas',1)">›</button>
+          <div class="carr-dots" id="dots-rosas">
+            <div class="carr-dot active" onclick="irA('rosas',0)"></div>
+            <div class="carr-dot" onclick="irA('rosas',1)"></div>
+            <div class="carr-dot" onclick="irA('rosas',2)"></div>
+          </div>
+        </div>
+        <div class="bolso-body">
+          <div class="bolso-nombre">Bolso Rosas Vintage</div>
+          <p class="bolso-desc">Lienzo rayado verde y blanco · Estampado rosas románticas · Asa natural</p>
+          <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Me%20interesa%20el%20*Bolso%20Rosas%20Vintage*" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>Consultar</a>
+        </div>
+      </div>
+
+    </div>
+    <a class="btn-wsp" href="https://wa.me/541178248053?text=Hola!%20Quer%C3%ADa%20consultar%20por%20los%20*bolsos%20de%20lienzo*" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.14 1.534 5.876L0 24l6.29-1.508A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.368l-.36-.214-3.732.894.944-3.617-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+      Consultar disponibilidad
+    </a>
+  </div>
+</section>
+
+<script>
+  const carrState = {};
+  function moverCarr(id, dir) {
+    if (!carrState[id]) carrState[id] = 0;
+    const track = document.getElementById('track-' + id);
+    const total = track.children.length;
+    carrState[id] = (carrState[id] + dir + total) % total;
+    track.style.transform = 'translateX(-' + (carrState[id] * 100) + '%)';
+    actualizarDots(id, total);
+  }
+  function irA(id, idx) {
+    if (!carrState[id]) carrState[id] = 0;
+    const track = document.getElementById('track-' + id);
+    const total = track.children.length;
+    carrState[id] = idx;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    actualizarDots(id, total);
+  }
+  function actualizarDots(id, total) {
+    const dots = document.querySelectorAll('#dots-' + id + ' .carr-dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === carrState[id]));
+  }
+</script>
 
 <!-- OTROS PRODUCTOS -->
 <section id="otros">
@@ -447,7 +575,7 @@
   <h2 class="section-title">¿Te gustó algo?<br><em>Hablemos</em></h2>
   <p>Enviamos a todo el país. Seguinos en redes para ver las últimas novedades.</p>
   <div class="contacto-btns">
-    <a href="mailto:contacto.patrondeideas@gmail.com" class="contacto-btn">
+    <a href="mailto:contacto.patrondeideas@gmail.com" class="contacto-btn" onclick="window.location.href='mailto:contacto.patrondeideas@gmail.com';return false;">
       <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Email
     </a>
     <a href="https://wa.me/541178248053?text=Hola!%20Vi%20su%20p%C3%A1gina%20y%20quer%C3%ADa%20consultar" target="_blank" class="contacto-btn">
@@ -465,7 +593,8 @@
 <div style="background:var(--crema-2);text-align:center;padding:20px 48px;border-top:1px solid var(--dorado-claro)">
   <p style="font-size:.75rem;color:var(--gris);letter-spacing:.06em;max-width:700px;margin:0 auto">⚠ Las imágenes de ambientación son ilustrativas. Los productos reales pueden presentar variaciones en colores y texturas según la tela disponible.</p>
 </div>
-<footer>© 2025 <span>Patrón de Ideas</span> — Diseño Original · Hecho con ♡</footer>
+<footer>© 2026 <span>Patrón de Ideas</span> — Diseño Original · Hecho con ♡</footer>
 
 </body>
 </html>
+
